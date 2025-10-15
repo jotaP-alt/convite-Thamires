@@ -1,113 +1,86 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Convite - Thamires 22 Anos 🎃</title>
 
-  <!-- Open Graph (thumb no WhatsApp) -->
-  <meta property="og:title" content="Convite — Thamires 22 Anos 🎃" />
-  <meta property="og:description" content="Toque para ver o convite completo (com som) 👀" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://convite-thamires.vercel.app" />
-  <meta property="og:image" content="https://convite-thamires.vercel.app/convite_final.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="theme-color" content="#000000" />
+  <!-- Open Graph (thumb do WhatsApp) -->
+  <meta property="og:title" content="Convite — Thamires 22 Anos 🎃"/>
+  <meta property="og:description" content="Toque para ver o convite completo (com som) 👀"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://convite-thamires.vercel.app"/>
+  <meta property="og:image" content="https://convite-thamires.vercel.app/convite_final.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="theme-color" content="#000000"/>
 
-  <!-- Fontes com vibe de convite/Halloween -->
+  <!-- Fontes -->
   <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Preload midias -->
+  <!-- Preloads -->
   <link rel="preload" as="image" href="/convite_final.png">
   <link rel="preload" as="video" href="/susto.mp4">
   <link rel="preload" as="audio" href="/grito.mp3">
 
   <style>
     :root { --ctaH: 56px; --blood:#e31919; --bloodGlow:#ff3b3b; }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { width:100%; height:100%; background:#000; overflow:hidden; display:flex; justify-content:center; align-items:center; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:100%;height:100%;background:#000;overflow:hidden;display:flex;justify-content:center;align-items:center}
 
-    /* Convite sempre visível (não fica atrás do botão) */
-    #convite{
-      max-width:100%;
-      max-height:calc(100% - var(--ctaH) - 6px);
-      width:auto; height:auto; object-fit:contain;
-      display:block; margin:auto; user-select:none; -webkit-user-drag:none;
-    }
+    /* Transições */
+    .fade{opacity:1;transition:opacity .28s ease}
+    .hidden{opacity:0;pointer-events:none}
 
-    /* Botão (gatilho) – pulsando */
-    #msgToque{
-      position:fixed; left:0; right:0; bottom:0; height:var(--ctaH);
-      display:flex; align-items:center; justify-content:center;
-      background:transparent; z-index:5; cursor:pointer; user-select:none;
-    }
-    #msgToque span{
-      font-family:"Creepster", system-ui, sans-serif;
-      font-size:clamp(0.9rem, 2.6vw, 1.1rem);
-      color:#fff; white-space:nowrap;
-      padding:6px 12px; border-radius:10px;
-      background:rgba(0,0,0,.70);
-      border:1.5px solid orange;
-      box-shadow:0 0 10px rgba(255,165,0,.75);
-      animation:pulsar 1.25s infinite ease-in-out;
-    }
-    @keyframes pulsar{
-      0%,100% { transform:scale(1); box-shadow:0 0 10px rgba(255,165,0,.75); }
-      50%     { transform:scale(1.06); box-shadow:0 0 22px rgba(255,80,0,.9); }
-    }
+    /* Convite (ajustado p/ não ser coberto) */
+    #convite{max-width:100%;max-height:calc(100% - var(--ctaH) - 6px);width:auto;height:auto;object-fit:contain;display:block;margin:auto;user-select:none;-webkit-user-drag:none}
+
+    /* Botão (gatilho) com pulso */
+    #msgToque{position:fixed;left:0;right:0;bottom:0;height:var(--ctaH);display:flex;align-items:center;justify-content:center;background:transparent;z-index:5;cursor:pointer;user-select:none}
+    #msgToque span{font-family:"Creepster",system-ui,sans-serif;font-size:clamp(.9rem,2.6vw,1.1rem);color:#fff;white-space:nowrap;padding:6px 12px;border-radius:10px;background:rgba(0,0,0,.7);border:1.5px solid orange;box-shadow:0 0 10px rgba(255,165,0,.75);animation:pulsar 1.25s infinite ease-in-out}
+    @keyframes pulsar{0%,100%{transform:scale(1);box-shadow:0 0 10px rgba(255,165,0,.75)}50%{transform:scale(1.06);box-shadow:0 0 22px rgba(255,80,0,.9)}}
 
     /* Vídeo do susto */
-    #jumpscare{
-      position:fixed; inset:0; width:100%; height:100%;
-      object-fit:contain; background:#000; display:none; z-index:10;
-    }
+    #jumpscare{position:fixed;inset:0;width:100%;height:100%;object-fit:contain;background:#000;display:none;z-index:10}
 
-    /* Tela final com o endereço (tema Halloween) */
-    #endScreen{
-      position:fixed; inset:0; display:none; z-index:12;
-      /* fundo preto com vinheta escura */
-      background:
-        radial-gradient(120% 120% at 50% 100%, rgba(40,0,0,.35) 0%, rgba(0,0,0,.95) 55%, #000 100%),
-        #000;
-      color:var(--blood);
-      text-shadow: 0 0 10px var(--bloodGlow), 0 0 22px rgba(227,25,25,.35);
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      padding:28px 18px; text-align:center;
+    /* Tela final (endereço) */
+    #endScreen{position:fixed;inset:0;display:none;z-index:12;background:
+      radial-gradient(120% 120% at 50% 100%, rgba(40,0,0,.35) 0%, rgba(0,0,0,.95) 55%, #000 100%), #000;
+      color:var(--blood);text-shadow:0 0 10px var(--bloodGlow),0 0 22px rgba(227,25,25,.35);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 18px;text-align:center;gap:14px}
+    .end-title{font-family:"Creepster",system-ui,sans-serif;font-size:clamp(1.6rem,6vw,2.4rem);letter-spacing:1px;margin-bottom:2px}
+    .end-sub{font-family:"Cinzel",serif;font-weight:700;font-size:clamp(1.1rem,4.5vw,1.5rem)}
+    .end-address{font-family:"Cinzel",serif;font-size:clamp(.98rem,4vw,1.25rem);line-height:1.3;max-width:min(720px,92vw)}
+    .divider{width:min(200px,70vw);height:2px;background:linear-gradient(90deg,transparent,var(--bloodGlow),transparent);box-shadow:0 0 16px var(--bloodGlow)}
+
+    /* Botão Google Maps — temático */
+    .maps-btn{
+      margin-top:6px;
+      font-family:"Creepster",system-ui,sans-serif;
+      font-size:clamp(1rem,3.8vw,1.25rem);
+      color:#fff; text-decoration:none;
+      padding:10px 16px; border-radius:12px;
+      background:linear-gradient(180deg, rgba(90,0,0,.85), rgba(0,0,0,.95));
+      border:2px solid var(--blood);
+      box-shadow:0 0 14px var(--bloodGlow), inset 0 0 12px rgba(227,25,25,.28);
+      display:inline-flex; align-items:center; gap:10px;
+      transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
     }
-    .end-title{
-      font-family:"Creepster", system-ui, sans-serif;
-      font-size:clamp(1.6rem, 6vw, 2.4rem);
-      letter-spacing:1px; margin-bottom:10px;
+    .maps-btn::before{
+      content:"📍"; filter:drop-shadow(0 0 6px var(--bloodGlow));
     }
-    .end-sub{
-      font-family:"Cinzel", serif;
-      font-weight:700;
-      font-size:clamp(1.1rem, 4.5vw, 1.5rem);
-      margin-bottom:8px;
-    }
-    .end-address{
-      font-family:"Cinzel", serif;
-      font-size:clamp(0.98rem, 4vw, 1.25rem);
-      line-height:1.3;
-      max-width:min(720px, 92vw);
-    }
-    .divider{
-      width:min(200px, 70vw);
-      height:2px; background:linear-gradient(90deg, transparent, var(--bloodGlow), transparent);
-      margin:14px 0 12px;
-      box-shadow:0 0 16px var(--bloodGlow);
-    }
+    .maps-btn:hover{ transform:translateY(-1px); box-shadow:0 0 20px var(--bloodGlow), inset 0 0 14px rgba(227,25,25,.38); filter:brightness(1.08); }
+    .maps-btn:active{ transform:translateY(0); }
 
     @media (max-height:560px){
-      :root{ --ctaH: 50px; }
-      #msgToque span{ font-size:clamp(0.85rem, 2.8vw, 1rem); padding:5px 10px; }
-      .end-address{ line-height:1.25; }
+      :root{--ctaH:50px}
+      #msgToque span{font-size:clamp(.85rem,2.8vw,1rem);padding:5px 10px}
+      .end-address{line-height:1.25}
     }
   </style>
 </head>
 <body>
-  <!-- Convite (tela inicial) -->
-  <img id="convite" src="convite_final.png" alt="Convite Halloween Thamires" draggable="false" />
+  <!-- Convite -->
+  <img id="convite" class="fade" src="convite_final.png" alt="Convite Halloween Thamires" draggable="false"/>
 
   <!-- Botão que dispara o susto -->
   <div id="msgToque" role="button" tabindex="0" aria-label="Toque para ver o convite completo">
@@ -115,56 +88,66 @@
   </div>
 
   <!-- Vídeo e áudio -->
-  <video id="jumpscare" src="susto.mp4" playsinline></video>
-  <audio id="audioGrito" src="grito.mp3"></audio>
+  <video id="jumpscare" class="fade hidden" src="susto.mp4" playsinline preload="auto"></video>
+  <audio id="audioGrito" src="grito.mp3" preload="auto"></audio>
 
-  <!-- Tela final com o endereço -->
-  <section id="endScreen" aria-live="polite">
+  <!-- Tela final -->
+  <section id="endScreen" class="fade hidden" aria-live="polite">
     <div class="end-title">Local da Festa</div>
     <div class="divider"></div>
     <div class="end-sub">Endereço</div>
-    <div class="end-address">
-      Rua 1044, bloco 180, casa 1 — Volta Grande 4
-    </div>
+    <div class="end-address">Rua 1044, bloco 180, casa 1 — Volta Grande 4</div>
+
+    <!-- Botão Google Maps -->
+    <a class="maps-btn" target="_blank" rel="noopener noreferrer"
+       href="https://www.google.com/maps/search/?api=1&query=Rua+1044,+bloco+180,+casa+1+Volta+Grande+4">
+      Abrir no Google Maps
+    </a>
   </section>
 
   <script>
-    const btn = document.getElementById('msgToque');
-    const convite = document.getElementById('convite');
-    const video = document.getElementById('jumpscare');
-    const audio = document.getElementById('audioGrito');
-    const endScreen = document.getElementById('endScreen');
+    const btn      = document.getElementById('msgToque');
+    const convite  = document.getElementById('convite');
+    const video    = document.getElementById('jumpscare');
+    const audio    = document.getElementById('audioGrito');
+    const endScr   = document.getElementById('endScreen');
+
+    // helpers de fade
+    function show(el){ el.style.display = (el.tagName==='VIDEO' || el.tagName==='SECTION') ? 'block' : 'flex'; requestAnimationFrame(()=>el.classList.remove('hidden')); }
+    function hide(el){ el.classList.add('hidden'); setTimeout(()=>{ el.style.display='none'; }, 280); }
 
     function disparaSusto(){
-      // Esconde tela inicial
-      btn.style.display='none';
-      convite.style.display='none';
-      // Mostra vídeo
-      video.style.display='block';
+      hide(btn);
+      hide(convite);
 
-      // (Opcional) vibração: descomente se quiser
-      // navigator.vibrate?.([150,70,200]);
-
-      // Reproduz
+      // Prepara e mostra o vídeo
       video.currentTime = 0;
       audio.currentTime = 0;
-      video.play().catch(()=>{});
-      audio.play().catch(()=>{});
+      video.style.display='block';
+      requestAnimationFrame(()=> video.classList.remove('hidden'));
 
-      // Interrompe após 2.5s e mostra o endereço
-      const DURA_SUSTO_MS = 2500;
-      setTimeout(() => {
-        try { video.pause(); } catch(e){}
-        try { audio.pause(); } catch(e){}
-        video.style.display='none';
+      // navigator.vibrate?.([150,70,200]); // (opcional) vibração
 
-        // Mostra tela final (endereço)
-        endScreen.style.display='flex';
-      }, DURA_SUSTO_MS);
+      Promise.allSettled([ video.play(), audio.play() ]).finally(()=>{
+        let started = false;
+        const startTimer = ()=>{
+          if(started) return;
+          started = true;
+          // 2.5s após começar a tocar de verdade
+          setTimeout(()=> {
+            try{ video.pause(); }catch(e){}
+            try{ audio.pause(); }catch(e){}
+            hide(video);
+            show(endScr);
+          }, 2500);
+        };
+        video.addEventListener('playing', startTimer, { once:true });
+        setTimeout(startTimer, 1500); // fallback
+      });
     }
 
-    btn.addEventListener('click',disparaSusto);
-    btn.addEventListener('keydown',e=>{
+    btn.addEventListener('click', disparaSusto);
+    btn.addEventListener('keydown', e=>{
       if(e.key==='Enter'||e.key===' '){ e.preventDefault(); disparaSusto(); }
     });
   </script>
