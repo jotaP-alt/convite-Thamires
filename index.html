@@ -21,38 +21,48 @@
       align-items: center;
     }
 
-    #convite, #jumpscare {
-      position: absolute;
+    #convite {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      margin: auto;
+    }
+
+    #jumpscare {
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-    }
-
-    #jumpscare {
       display: none;
+      z-index: 10;
     }
   </style>
 </head>
 <body>
   <img id="convite" src="convite_final.png" alt="Convite Halloween Thamires" />
-  <video id="jumpscare" src="susto.mp4" preload="auto"></video>
-  <audio id="audioGrito" src="grito.mp3" preload="auto"></audio>
+  <video id="jumpscare" src="susto.mp4" playsinline></video>
+  <audio id="audioGrito" src="grito.mp3"></audio>
 
   <script>
     const convite = document.getElementById('convite');
     const jumpscare = document.getElementById('jumpscare');
     const audio = document.getElementById('audioGrito');
 
-    // Espera 3 segundos antes de ativar o jumpscare
+    // Espera 3 segundos antes do jumpscare
     setTimeout(() => {
       convite.style.display = 'none';
       jumpscare.style.display = 'block';
-      jumpscare.play();
-      audio.play();
 
-      // Quando o vídeo terminar, volta para o convite
+      // Tocar vídeo e áudio simultaneamente
+      jumpscare.play().catch(err => console.log("Autoplay bloqueado:", err));
+      audio.play().catch(err => console.log("Autoplay bloqueado:", err));
+
+      // Quando o vídeo terminar, volta pro convite
       jumpscare.onended = () => {
         jumpscare.style.display = 'none';
         convite.style.display = 'block';
