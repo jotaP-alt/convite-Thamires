@@ -4,16 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Convite - Thamires 22 Anos 🎃</title>
+
+  <!-- ✅ Open Graph (WhatsApp/FB) -->
+  <meta property="og:title" content="Convite — Thamires 22 Anos 🎃" />
+  <meta property="og:description" content="Toque para ver o convite completo (com som) 👀" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://convite-thamires.vercel.app" />
+  <!-- Thumb: usando a própria imagem do convite -->
+  <meta property="og:image" content="https://convite-thamires.vercel.app/convite_final.png" />
+  <!-- Twitter card (também ajuda em alguns apps) -->
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Dica visual do navegador -->
+  <meta name="theme-color" content="#000000" />
+
+  <!-- Fonte de terror para o botão -->
   <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+
+  <!-- Pequenas otimizações de carregamento -->
+  <link rel="preload" as="image" href="/convite_final.png">
+  <link rel="preload" as="video" href="/susto.mp4">
+  <link rel="preload" as="audio" href="/grito.mp3">
+
   <style>
-    :root { --ctaH: 56px; } /* altura reservada p/ o botão (pequeno) */
+    :root { --ctaH: 56px; } /* altura reservada pro botão (não cobre o convite) */
     * { margin:0; padding:0; box-sizing:border-box; }
     html, body {
       width:100%; height:100%;
       background:#000; overflow:hidden;
       display:flex; justify-content:center; align-items:center;
     }
-    /* imagem nunca fica por trás do botão */
+
+    /* Convite sempre totalmente visível (não fica atrás do botão) */
     #convite{
       max-width:100%;
       max-height:calc(100% - var(--ctaH) - 6px);
@@ -21,18 +43,21 @@
       display:block; margin:auto;
       user-select:none; -webkit-user-drag:none;
     }
+
+    /* Vídeo do susto ocupando a tela sem distorcer */
     #jumpscare{
       position:fixed; inset:0; width:100%; height:100%;
       object-fit:contain; background:#000; display:none; z-index:10;
     }
 
-    /* área do rodapé transparente */
+    /* Área do rodapé transparente (somente o botão visível) */
     #msgToque{
       position:fixed; left:0; right:0; bottom:0; height:var(--ctaH);
       display:flex; align-items:center; justify-content:center;
       background:transparent; z-index:5; cursor:pointer; user-select:none;
     }
-    /* BOTÃO com pulso */
+
+    /* Botão com efeito de pulso */
     #msgToque span{
       font-family:"Creepster", system-ui, sans-serif;
       font-size:clamp(0.9rem, 2.6vw, 1.1rem);
@@ -49,6 +74,7 @@
     }
     #msgToque:focus{ outline:3px solid #ff6a00; }
 
+    /* Telas muito baixas: reduz um pouco o botão e a reserva */
     @media (max-height:560px){
       :root{ --ctaH: 50px; }
       #msgToque span{ font-size:clamp(0.85rem, 2.8vw, 1rem); padding:5px 10px; }
@@ -58,7 +84,7 @@
 <body>
   <img id="convite" src="convite_final.png" alt="Convite Halloween Thamires" draggable="false" />
 
-  <!-- somente este botão dispara o susto -->
+  <!-- Só este botão dispara o susto -->
   <div id="msgToque" role="button" tabindex="0" aria-label="Toque para ver o convite completo">
     <span>🎃 TOQUE AQUI PARA VER O CONVITE COMPLETO 🎃</span>
   </div>
@@ -76,14 +102,20 @@
       btn.style.display='none';
       convite.style.display='none';
       video.style.display='block';
+
+      // Se quiser vibração no Android, descomente a linha abaixo:
+      // navigator.vibrate?.([150, 70, 200]);
+
       video.play().catch(()=>{});
       audio.play().catch(()=>{});
+
       video.onended = ()=>{
         video.style.display='none';
         convite.style.display='block';
         // mensagem NÃO volta
       };
     }
+
     btn.addEventListener('click',disparaSusto);
     btn.addEventListener('keydown',e=>{
       if(e.key==='Enter'||e.key===' '){ e.preventDefault(); disparaSusto(); }
