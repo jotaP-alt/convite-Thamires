@@ -32,29 +32,95 @@
     .hidden{opacity:0;pointer-events:none}
 
     /* Convite (ajustado p/ não ser coberto) */
-    #convite{max-width:100%;max-height:calc(100% - var(--ctaH) - 6px);width:auto;height:auto;object-fit:contain;display:block;margin:auto;user-select:none;-webkit-user-drag:none}
+    #convite{
+      max-width:100%;
+      max-height:calc(100% - var(--ctaH) - 6px);
+      width:auto;height:auto;object-fit:contain;
+      display:block;margin:auto;user-select:none;-webkit-user-drag:none
+    }
 
     /* Botão (gatilho) com pulso */
-    #msgToque{position:fixed;left:0;right:0;bottom:0;height:var(--ctaH);display:flex;align-items:center;justify-content:center;background:transparent;z-index:5;cursor:pointer;user-select:none}
-    #msgToque span{font-family:"Creepster",system-ui,sans-serif;font-size:clamp(.9rem,2.6vw,1.1rem);color:#fff;white-space:nowrap;padding:6px 12px;border-radius:10px;background:rgba(0,0,0,.7);border:1.5px solid orange;box-shadow:0 0 10px rgba(255,165,0,.75);animation:pulsar 1.25s infinite ease-in-out}
-    @keyframes pulsar{0%,100%{transform:scale(1);box-shadow:0 0 10px rgba(255,165,0,.75)}50%{transform:scale(1.06);box-shadow:0 0 22px rgba(255,80,0,.9)}}
+    #msgToque{
+      position:fixed;left:0;right:0;bottom:0;height:var(--ctaH);
+      display:flex;align-items:center;justify-content:center;
+      background:transparent;z-index:5;cursor:pointer;user-select:none
+    }
+    #msgToque span{
+      font-family:"Creepster",system-ui,sans-serif;
+      font-size:clamp(.9rem,2.6vw,1.1rem);color:#fff;white-space:nowrap;
+      padding:6px 12px;border-radius:10px;background:rgba(0,0,0,.7);
+      border:1.5px solid orange;box-shadow:0 0 10px rgba(255,165,0,.75);
+      animation:pulsar 1.25s infinite ease-in-out
+    }
+    @keyframes pulsar{
+      0%,100%{transform:scale(1);box-shadow:0 0 10px rgba(255,165,0,.75)}
+      50%{transform:scale(1.06);box-shadow:0 0 22px rgba(255,80,0,.9)}
+    }
 
     /* Vídeo do susto */
-    #jumpscare{position:fixed;inset:0;width:100%;height:100%;object-fit:contain;background:#000;display:none;z-index:10}
+    #jumpscare{
+      position:fixed;inset:0;width:100%;height:100%;
+      object-fit:contain;background:#000;display:none;z-index:10
+    }
 
-    /* Tela final (endereço) */
-    #endScreen{position:fixed;inset:0;display:none;z-index:12;background:
-      radial-gradient(120% 120% at 50% 100%, rgba(40,0,0,.35) 0%, rgba(0,0,0,.95) 55%, #000 100%), #000;
-      color:var(--blood);text-shadow:0 0 10px var(--bloodGlow),0 0 22px rgba(227,25,25,.35);
-      display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 18px;text-align:center;gap:14px}
+    /* ===== Tela final (centralizada e com sangue no topo) ===== */
+    #endScreen{
+      position:fixed;inset:0;display:none;z-index:12;
+      background:
+        radial-gradient(120% 120% at 50% 100%, rgba(40,0,0,.35) 0%, rgba(0,0,0,.95) 55%, #000 100%),
+        #000;
+      /* Centralização perfeita em qualquer celular */
+      display:flex;min-height:100vh;min-height:100dvh; /* iOS/Android */
+      align-items:center;justify-content:center;
+      padding:18px; text-align:center; overflow:hidden; /* p/ sangue não rolar a tela */
+    }
+
+    /* Camada decorativa: sangue escorrendo AO FUNDO */
+    #endScreen::before{
+      content:""; position:absolute; inset:0 0 auto 0; height:26vh;
+      background:
+        linear-gradient(180deg, rgba(227,25,25,.90) 0%, rgba(227,25,25,.75) 60%, rgba(227,25,25,0) 100%);
+      z-index:0; pointer-events:none;
+      /* Drips em pseudo máscara simples usando gradientes circulares */
+      -webkit-mask:
+        radial-gradient(18px 22px at 8%   85%, #000 98%, transparent) 0 0 / 120px 60px repeat-x,
+        radial-gradient(22px 26px at 28%  88%, #000 98%, transparent) 0 0 / 140px 70px repeat-x,
+        radial-gradient(16px 20px at 54%  86%, #000 98%, transparent) 0 0 / 160px 60px repeat-x,
+        radial-gradient(20px 24px at 74%  90%, #000 98%, transparent) 0 0 / 130px 70px repeat-x,
+        radial-gradient(18px 22px at 92%  87%, #000 98%, transparent) 0 0 / 150px 60px repeat-x;
+      mask:
+        radial-gradient(18px 22px at 8%   85%, #000 98%, transparent) 0 0 / 120px 60px repeat-x,
+        radial-gradient(22px 26px at 28%  88%, #000 98%, transparent) 0 0 / 140px 70px repeat-x,
+        radial-gradient(16px 20px at 54%  86%, #000 98%, transparent) 0 0 / 160px 60px repeat-x,
+        radial-gradient(20px 24px at 74%  90%, #000 98%, transparent) 0 0 / 130px 70px repeat-x,
+        radial-gradient(18px 22px at 92%  87%, #000 98%, transparent) 0 0 / 150px 60px repeat-x;
+      animation: dripFloat 4s ease-in-out infinite;
+    }
+    @keyframes dripFloat{
+      0%,100%{ transform: translateY(0px); }
+      50%    { transform: translateY(6px); }
+    }
+
+    /* Conteúdo da tela final (fica acima do sangue) */
+    .end-wrap{
+      position:relative; z-index:1; /* acima do ::before */
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:14px; max-width:min(720px,92vw);
+      color:var(--blood); text-shadow:0 0 10px var(--bloodGlow),0 0 22px rgba(227,25,25,.35);
+    }
     .end-title{font-family:"Creepster",system-ui,sans-serif;font-size:clamp(1.6rem,6vw,2.4rem);letter-spacing:1px;margin-bottom:2px}
     .end-sub{font-family:"Cinzel",serif;font-weight:700;font-size:clamp(1.1rem,4.5vw,1.5rem)}
-    .end-address{font-family:"Cinzel",serif;font-size:clamp(.98rem,4vw,1.25rem);line-height:1.3;max-width:min(720px,92vw)}
-    .divider{width:min(200px,70vw);height:2px;background:linear-gradient(90deg,transparent,var(--bloodGlow),transparent);box-shadow:0 0 16px var(--bloodGlow)}
+    .end-address{font-family:"Cinzel",serif;font-size:clamp(.98rem,4vw,1.25rem);line-height:1.35}
+
+    .divider{
+      width:min(220px,72vw);height:2px;
+      background:linear-gradient(90deg,transparent,var(--bloodGlow),transparent);
+      box-shadow:0 0 16px var(--bloodGlow)
+    }
 
     /* Botão Google Maps — temático */
     .maps-btn{
-      margin-top:6px;
+      margin-top:4px;
       font-family:"Creepster",system-ui,sans-serif;
       font-size:clamp(1rem,3.8vw,1.25rem);
       color:#fff; text-decoration:none;
@@ -65,16 +131,14 @@
       display:inline-flex; align-items:center; gap:10px;
       transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
     }
-    .maps-btn::before{
-      content:"📍"; filter:drop-shadow(0 0 6px var(--bloodGlow));
-    }
+    .maps-btn::before{ content:"📍"; filter:drop-shadow(0 0 6px var(--bloodGlow)); }
     .maps-btn:hover{ transform:translateY(-1px); box-shadow:0 0 20px var(--bloodGlow), inset 0 0 14px rgba(227,25,25,.38); filter:brightness(1.08); }
     .maps-btn:active{ transform:translateY(0); }
 
     @media (max-height:560px){
       :root{--ctaH:50px}
       #msgToque span{font-size:clamp(.85rem,2.8vw,1rem);padding:5px 10px}
-      .end-address{line-height:1.25}
+      .end-address{line-height:1.28}
     }
   </style>
 </head>
@@ -93,16 +157,16 @@
 
   <!-- Tela final -->
   <section id="endScreen" class="fade hidden" aria-live="polite">
-    <div class="end-title">Local da Festa</div>
-    <div class="divider"></div>
-    <div class="end-sub">Endereço</div>
-    <div class="end-address">Rua 1044, bloco 180, casa 1 — Volta Grande 4</div>
-
-    <!-- Botão Google Maps -->
-    <a class="maps-btn" target="_blank" rel="noopener noreferrer"
-       href="https://www.google.com/maps/search/?api=1&query=Rua+1044,+bloco+180,+casa+1+Volta+Grande+4">
-      Abrir no Google Maps
-    </a>
+    <div class="end-wrap">
+      <div class="end-title">Local da Festa</div>
+      <div class="divider"></div>
+      <div class="end-sub">Endereço</div>
+      <div class="end-address">Rua 1044, bloco 180, casa 1 — Volta Grande 4</div>
+      <a class="maps-btn" target="_blank" rel="noopener noreferrer"
+         href="https://www.google.com/maps/search/?api=1&query=Rua+1044,+bloco+180,+casa+1+Volta+Grande+4">
+        Abrir no Google Maps
+      </a>
+    </div>
   </section>
 
   <script>
@@ -138,7 +202,7 @@
             try{ video.pause(); }catch(e){}
             try{ audio.pause(); }catch(e){}
             hide(video);
-            show(endScr);
+            show(endScr); // centralizada com sangue decorativo ao fundo
           }, 2500);
         };
         video.addEventListener('playing', startTimer, { once:true });
