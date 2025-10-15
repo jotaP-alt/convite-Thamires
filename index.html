@@ -51,7 +51,7 @@
 
     #msgToque {
       position: absolute;
-      bottom: 10%;
+      bottom: 4%; /* 👈 abaixei um pouco mais (era 10%) */
       left: 50%;
       transform: translateX(-50%);
       color: #fff;
@@ -84,7 +84,7 @@
     const audio = document.getElementById('audioGrito');
     const msg = document.getElementById('msgToque');
 
-    // Quando clicar na tela, toca o vídeo e o som imediatamente
+    // Ao clicar, o susto é instantâneo
     convite.addEventListener('click', () => {
       msg.style.display = 'none';
       convite.style.display = 'none';
