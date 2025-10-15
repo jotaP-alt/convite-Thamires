@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Convite - Thamires 22 Anos 🎃</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #convite, #jumpscare {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #jumpscare {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <img id="convite" src="convite_final.png" alt="Convite Halloween Thamires" />
+  <video id="jumpscare" src="susto.mp4" preload="auto"></video>
+  <audio id="audioGrito" src="grito.mp3" preload="auto"></audio>
+
+  <script>
+    const convite = document.getElementById('convite');
+    const jumpscare = document.getElementById('jumpscare');
+    const audio = document.getElementById('audioGrito');
+
+    // Espera 3 segundos antes de ativar o jumpscare
+    setTimeout(() => {
+      convite.style.display = 'none';
+      jumpscare.style.display = 'block';
+      jumpscare.play();
+      audio.play();
+
+      // Quando o vídeo terminar, volta para o convite
+      jumpscare.onended = () => {
+        jumpscare.style.display = 'none';
+        convite.style.display = 'block';
+      };
+    }, 3000);
+  </script>
+</body>
+</html>
