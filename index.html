@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Convite - Thamires 22 Anos 🎃</title>
 
-  <!-- Open Graph (thumb do WhatsApp) -->
+  <!-- Open Graph -->
   <meta property="og:title" content="Convite — Thamires 22 Anos 🎃"/>
   <meta property="og:description" content="Toque para ver o convite completo (com som) 👀"/>
   <meta property="og:type" content="website"/>
@@ -31,7 +31,7 @@
     .fade{opacity:1;transition:opacity .28s ease}
     .hidden{opacity:0;pointer-events:none}
 
-    /* Convite (ajustado p/ não ser coberto) */
+    /* Convite (não fica atrás do botão) */
     #convite{
       max-width:100%;
       max-height:calc(100% - var(--ctaH) - 6px);
@@ -63,49 +63,49 @@
       object-fit:contain;background:#000;display:none;z-index:10
     }
 
-    /* ===== Tela final (centralizada e com sangue no topo) ===== */
+    /* ===== Tela final (CENTRALIZADA + sangue no topo) ===== */
     #endScreen{
-      position:fixed;inset:0;display:none;z-index:12;
+      position:fixed; inset:0; display:none; z-index:12;
       background:
         radial-gradient(120% 120% at 50% 100%, rgba(40,0,0,.35) 0%, rgba(0,0,0,.95) 55%, #000 100%),
         #000;
-      /* Centralização perfeita em qualquer celular */
-      display:flex;min-height:100vh;min-height:100dvh; /* iOS/Android */
-      align-items:center;justify-content:center;
-      padding:18px; text-align:center; overflow:hidden; /* p/ sangue não rolar a tela */
+      /* centralização perfeita em qualquer orientação */
+      display:grid; place-items:center;
+      min-height:100vh; min-height:100dvh;
+      padding: clamp(12px, 5vh, 36px) 18px 18px; /* espaço pro sangue sem empurrar demais */
+      text-align:center; overflow:hidden;
     }
 
-    /* Camada decorativa: sangue escorrendo AO FUNDO */
+    /* Sangue AO FUNDO com movimento mais visível */
     #endScreen::before{
-      content:""; position:absolute; inset:0 0 auto 0; height:26vh;
-      background:
-        linear-gradient(180deg, rgba(227,25,25,.90) 0%, rgba(227,25,25,.75) 60%, rgba(227,25,25,0) 100%);
-      z-index:0; pointer-events:none;
-      /* Drips em pseudo máscara simples usando gradientes circulares */
+      content:""; position:absolute; left:0; right:0; top:0;
+      height:28vh; z-index:0; pointer-events:none;
+      background: linear-gradient(180deg, rgba(227,25,25,.95) 0%, rgba(227,25,25,.78) 55%, rgba(227,25,25,0) 100%);
+      /* máscaras para criar pingos */
       -webkit-mask:
-        radial-gradient(18px 22px at 8%   85%, #000 98%, transparent) 0 0 / 120px 60px repeat-x,
-        radial-gradient(22px 26px at 28%  88%, #000 98%, transparent) 0 0 / 140px 70px repeat-x,
-        radial-gradient(16px 20px at 54%  86%, #000 98%, transparent) 0 0 / 160px 60px repeat-x,
-        radial-gradient(20px 24px at 74%  90%, #000 98%, transparent) 0 0 / 130px 70px repeat-x,
-        radial-gradient(18px 22px at 92%  87%, #000 98%, transparent) 0 0 / 150px 60px repeat-x;
-      mask:
-        radial-gradient(18px 22px at 8%   85%, #000 98%, transparent) 0 0 / 120px 60px repeat-x,
-        radial-gradient(22px 26px at 28%  88%, #000 98%, transparent) 0 0 / 140px 70px repeat-x,
-        radial-gradient(16px 20px at 54%  86%, #000 98%, transparent) 0 0 / 160px 60px repeat-x,
-        radial-gradient(20px 24px at 74%  90%, #000 98%, transparent) 0 0 / 130px 70px repeat-x,
-        radial-gradient(18px 22px at 92%  87%, #000 98%, transparent) 0 0 / 150px 60px repeat-x;
-      animation: dripFloat 4s ease-in-out infinite;
+        radial-gradient(22px 26px at 6%  88%, #000 98%, transparent) 0 0 / 130px 70px repeat-x,
+        radial-gradient(18px 22px at 24% 86%, #000 98%, transparent) 0 0 / 150px 60px repeat-x,
+        radial-gradient(20px 24px at 48% 90%, #000 98%, transparent) 0 0 / 160px 70px repeat-x,
+        radial-gradient(16px 20px at 72% 85%, #000 98%, transparent) 0 0 / 150px 60px repeat-x,
+        radial-gradient(18px 22px at 92% 88%, #000 98%, transparent) 0 0 / 140px 70px repeat-x;
+              mask:
+        radial-gradient(22px 26px at 6%  88%, #000 98%, transparent) 0 0 / 130px 70px repeat-x,
+        radial-gradient(18px 22px at 24% 86%, #000 98%, transparent) 0 0 / 150px 60px repeat-x,
+        radial-gradient(20px 24px at 48% 90%, #000 98%, transparent) 0 0 / 160px 70px repeat-x,
+        radial-gradient(16px 20px at 72% 85%, #000 98%, transparent) 0 0 / 150px 60px repeat-x,
+        radial-gradient(18px 22px at 92% 88%, #000 98%, transparent) 0 0 / 140px 70px repeat-x;
+      animation: dripSlide 3.6s ease-in-out infinite;
     }
-    @keyframes dripFloat{
+    @keyframes dripSlide{
       0%,100%{ transform: translateY(0px); }
-      50%    { transform: translateY(6px); }
+      50%    { transform: translateY(22px); } /* queda visível */
     }
 
-    /* Conteúdo da tela final (fica acima do sangue) */
+    /* Conteúdo (acima do sangue) */
     .end-wrap{
       position:relative; z-index:1; /* acima do ::before */
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      gap:14px; max-width:min(720px,92vw);
+      display:flex; flex-direction:column; align-items:center; gap:14px;
+      max-width:min(720px,92vw);
       color:var(--blood); text-shadow:0 0 10px var(--bloodGlow),0 0 22px rgba(227,25,25,.35);
     }
     .end-title{font-family:"Creepster",system-ui,sans-serif;font-size:clamp(1.6rem,6vw,2.4rem);letter-spacing:1px;margin-bottom:2px}
@@ -181,29 +181,23 @@
     function hide(el){ el.classList.add('hidden'); setTimeout(()=>{ el.style.display='none'; }, 280); }
 
     function disparaSusto(){
-      hide(btn);
-      hide(convite);
+      hide(btn); hide(convite);
 
       // Prepara e mostra o vídeo
-      video.currentTime = 0;
-      audio.currentTime = 0;
-      video.style.display='block';
-      requestAnimationFrame(()=> video.classList.remove('hidden'));
-
+      video.currentTime = 0; audio.currentTime = 0;
+      video.style.display='block'; requestAnimationFrame(()=> video.classList.remove('hidden'));
       // navigator.vibrate?.([150,70,200]); // (opcional) vibração
 
       Promise.allSettled([ video.play(), audio.play() ]).finally(()=>{
         let started = false;
         const startTimer = ()=>{
-          if(started) return;
-          started = true;
-          // 2.5s após começar a tocar de verdade
+          if(started) return; started = true;
           setTimeout(()=> {
             try{ video.pause(); }catch(e){}
             try{ audio.pause(); }catch(e){}
             hide(video);
-            show(endScr); // centralizada com sangue decorativo ao fundo
-          }, 2500);
+            show(endScr);
+          }, 2500); // 2.5s após começar de verdade
         };
         video.addEventListener('playing', startTimer, { once:true });
         setTimeout(startTimer, 1500); // fallback
