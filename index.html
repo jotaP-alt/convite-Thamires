@@ -11,7 +11,7 @@
       box-sizing: border-box;
     }
 
-    body, html {
+    html, body {
       width: 100%;
       height: 100%;
       background-color: black;
@@ -30,6 +30,11 @@
       display: block;
       margin: auto;
       cursor: pointer;
+      transition: filter 0.3s ease;
+    }
+
+    #convite:hover {
+      filter: brightness(1.1);
     }
 
     #jumpscare {
@@ -38,33 +43,38 @@
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       display: none;
       z-index: 10;
+      background-color: black;
     }
 
     #msgToque {
       position: absolute;
-      bottom: 30px;
-      color: white;
-      font-family: sans-serif;
-      font-size: 1rem;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
       text-align: center;
       background: rgba(0, 0, 0, 0.6);
-      padding: 8px 16px;
-      border-radius: 8px;
-      animation: pisca 1.2s infinite;
+      padding: 10px 18px;
+      border: 2px solid orange;
+      border-radius: 12px;
+      box-shadow: 0 0 12px orange;
+      animation: pulsar 1.3s infinite;
     }
 
-    @keyframes pisca {
-      0%, 50%, 100% { opacity: 1; }
-      25%, 75% { opacity: 0.3; }
+    @keyframes pulsar {
+      0%, 100% { box-shadow: 0 0 10px orange; transform: translateX(-50%) scale(1); }
+      50% { box-shadow: 0 0 25px red; transform: translateX(-50%) scale(1.05); }
     }
   </style>
 </head>
 <body>
   <img id="convite" src="convite_final.png" alt="Convite Halloween Thamires" />
-  <div id="msgToque">🔊 Toque na tela para ver o convite completo</div>
+  <div id="msgToque">🎃 Toque aqui para ver o convite completo 🎃</div>
   <video id="jumpscare" src="susto.mp4" playsinline></video>
   <audio id="audioGrito" src="grito.mp3"></audio>
 
@@ -74,26 +84,20 @@
     const audio = document.getElementById('audioGrito');
     const msg = document.getElementById('msgToque');
 
-    // Espera o toque do usuário para liberar som e vídeo
+    // Quando clicar na tela, toca o vídeo e o som imediatamente
     convite.addEventListener('click', () => {
       msg.style.display = 'none';
+      convite.style.display = 'none';
+      jumpscare.style.display = 'block';
 
-      // Espera 3 segundos após o toque antes do jumpscare
-      setTimeout(() => {
-        convite.style.display = 'none';
-        jumpscare.style.display = 'block';
+      jumpscare.play().catch(err => console.log("Erro vídeo:", err));
+      audio.play().catch(err => console.log("Erro áudio:", err));
 
-        // Reproduz vídeo e áudio juntos
-        jumpscare.play().catch(err => console.log("Erro vídeo:", err));
-        audio.play().catch(err => console.log("Erro áudio:", err));
-
-        // Volta para o convite no fim
-        jumpscare.onended = () => {
-          jumpscare.style.display = 'none';
-          convite.style.display = 'block';
-          msg.style.display = 'block';
-        };
-      }, 3000);
+      jumpscare.onended = () => {
+        jumpscare.style.display = 'none';
+        convite.style.display = 'block';
+        msg.style.display = 'block';
+      };
     });
   </script>
 </body>
