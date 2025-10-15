@@ -29,6 +29,7 @@
       object-fit: contain;
       display: block;
       margin: auto;
+      cursor: pointer;
     }
 
     #jumpscare {
@@ -41,10 +42,29 @@
       display: none;
       z-index: 10;
     }
+
+    #msgToque {
+      position: absolute;
+      bottom: 30px;
+      color: white;
+      font-family: sans-serif;
+      font-size: 1rem;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 8px 16px;
+      border-radius: 8px;
+      animation: pisca 1.2s infinite;
+    }
+
+    @keyframes pisca {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0.3; }
+    }
   </style>
 </head>
 <body>
   <img id="convite" src="convite_final.png" alt="Convite Halloween Thamires" />
+  <div id="msgToque">🔊 Toque na tela para ver o convite completo</div>
   <video id="jumpscare" src="susto.mp4" playsinline></video>
   <audio id="audioGrito" src="grito.mp3"></audio>
 
@@ -52,22 +72,29 @@
     const convite = document.getElementById('convite');
     const jumpscare = document.getElementById('jumpscare');
     const audio = document.getElementById('audioGrito');
+    const msg = document.getElementById('msgToque');
 
-    // Espera 3 segundos antes do jumpscare
-    setTimeout(() => {
-      convite.style.display = 'none';
-      jumpscare.style.display = 'block';
+    // Espera o toque do usuário para liberar som e vídeo
+    convite.addEventListener('click', () => {
+      msg.style.display = 'none';
 
-      // Tocar vídeo e áudio simultaneamente
-      jumpscare.play().catch(err => console.log("Autoplay bloqueado:", err));
-      audio.play().catch(err => console.log("Autoplay bloqueado:", err));
+      // Espera 3 segundos após o toque antes do jumpscare
+      setTimeout(() => {
+        convite.style.display = 'none';
+        jumpscare.style.display = 'block';
 
-      // Quando o vídeo terminar, volta pro convite
-      jumpscare.onended = () => {
-        jumpscare.style.display = 'none';
-        convite.style.display = 'block';
-      };
-    }, 3000);
+        // Reproduz vídeo e áudio juntos
+        jumpscare.play().catch(err => console.log("Erro vídeo:", err));
+        audio.play().catch(err => console.log("Erro áudio:", err));
+
+        // Volta para o convite no fim
+        jumpscare.onended = () => {
+          jumpscare.style.display = 'none';
+          convite.style.display = 'block';
+          msg.style.display = 'block';
+        };
+      }, 3000);
+    });
   </script>
 </body>
 </html>
