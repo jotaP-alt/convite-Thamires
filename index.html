@@ -5,64 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Convite - Thamires 22 Anos 🎃</title>
 
-  <!-- ✅ Open Graph (WhatsApp/FB) -->
+  <!-- Open Graph (thumb no WhatsApp) -->
   <meta property="og:title" content="Convite — Thamires 22 Anos 🎃" />
   <meta property="og:description" content="Toque para ver o convite completo (com som) 👀" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://convite-thamires.vercel.app" />
-  <!-- Thumb: usando a própria imagem do convite -->
   <meta property="og:image" content="https://convite-thamires.vercel.app/convite_final.png" />
-  <!-- Twitter card (também ajuda em alguns apps) -->
   <meta name="twitter:card" content="summary_large_image" />
-
-  <!-- Dica visual do navegador -->
   <meta name="theme-color" content="#000000" />
 
-  <!-- Fonte de terror para o botão -->
-  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+  <!-- Fontes com vibe de convite/Halloween -->
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Pequenas otimizações de carregamento -->
+  <!-- Preload midias -->
   <link rel="preload" as="image" href="/convite_final.png">
   <link rel="preload" as="video" href="/susto.mp4">
   <link rel="preload" as="audio" href="/grito.mp3">
 
   <style>
-    :root { --ctaH: 56px; } /* altura reservada pro botão (não cobre o convite) */
+    :root { --ctaH: 56px; --blood:#e31919; --bloodGlow:#ff3b3b; }
     * { margin:0; padding:0; box-sizing:border-box; }
-    html, body {
-      width:100%; height:100%;
-      background:#000; overflow:hidden;
-      display:flex; justify-content:center; align-items:center;
-    }
+    html, body { width:100%; height:100%; background:#000; overflow:hidden; display:flex; justify-content:center; align-items:center; }
 
-    /* Convite sempre totalmente visível (não fica atrás do botão) */
+    /* Convite sempre visível (não fica atrás do botão) */
     #convite{
       max-width:100%;
       max-height:calc(100% - var(--ctaH) - 6px);
       width:auto; height:auto; object-fit:contain;
-      display:block; margin:auto;
-      user-select:none; -webkit-user-drag:none;
+      display:block; margin:auto; user-select:none; -webkit-user-drag:none;
     }
 
-    /* Vídeo do susto ocupando a tela sem distorcer */
-    #jumpscare{
-      position:fixed; inset:0; width:100%; height:100%;
-      object-fit:contain; background:#000; display:none; z-index:10;
-    }
-
-    /* Área do rodapé transparente (somente o botão visível) */
+    /* Botão (gatilho) – pulsando */
     #msgToque{
       position:fixed; left:0; right:0; bottom:0; height:var(--ctaH);
       display:flex; align-items:center; justify-content:center;
       background:transparent; z-index:5; cursor:pointer; user-select:none;
     }
-
-    /* Botão com efeito de pulso */
     #msgToque span{
       font-family:"Creepster", system-ui, sans-serif;
       font-size:clamp(0.9rem, 2.6vw, 1.1rem);
-      line-height:1.05; letter-spacing:0.5px; color:#fff;
-      padding:6px 12px; border-radius:10px; white-space:nowrap;
+      color:#fff; white-space:nowrap;
+      padding:6px 12px; border-radius:10px;
       background:rgba(0,0,0,.70);
       border:1.5px solid orange;
       box-shadow:0 0 10px rgba(255,165,0,.75);
@@ -72,48 +55,112 @@
       0%,100% { transform:scale(1); box-shadow:0 0 10px rgba(255,165,0,.75); }
       50%     { transform:scale(1.06); box-shadow:0 0 22px rgba(255,80,0,.9); }
     }
-    #msgToque:focus{ outline:3px solid #ff6a00; }
 
-    /* Telas muito baixas: reduz um pouco o botão e a reserva */
+    /* Vídeo do susto */
+    #jumpscare{
+      position:fixed; inset:0; width:100%; height:100%;
+      object-fit:contain; background:#000; display:none; z-index:10;
+    }
+
+    /* Tela final com o endereço (tema Halloween) */
+    #endScreen{
+      position:fixed; inset:0; display:none; z-index:12;
+      /* fundo preto com vinheta escura */
+      background:
+        radial-gradient(120% 120% at 50% 100%, rgba(40,0,0,.35) 0%, rgba(0,0,0,.95) 55%, #000 100%),
+        #000;
+      color:var(--blood);
+      text-shadow: 0 0 10px var(--bloodGlow), 0 0 22px rgba(227,25,25,.35);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:28px 18px; text-align:center;
+    }
+    .end-title{
+      font-family:"Creepster", system-ui, sans-serif;
+      font-size:clamp(1.6rem, 6vw, 2.4rem);
+      letter-spacing:1px; margin-bottom:10px;
+    }
+    .end-sub{
+      font-family:"Cinzel", serif;
+      font-weight:700;
+      font-size:clamp(1.1rem, 4.5vw, 1.5rem);
+      margin-bottom:8px;
+    }
+    .end-address{
+      font-family:"Cinzel", serif;
+      font-size:clamp(0.98rem, 4vw, 1.25rem);
+      line-height:1.3;
+      max-width:min(720px, 92vw);
+    }
+    .divider{
+      width:min(200px, 70vw);
+      height:2px; background:linear-gradient(90deg, transparent, var(--bloodGlow), transparent);
+      margin:14px 0 12px;
+      box-shadow:0 0 16px var(--bloodGlow);
+    }
+
     @media (max-height:560px){
       :root{ --ctaH: 50px; }
       #msgToque span{ font-size:clamp(0.85rem, 2.8vw, 1rem); padding:5px 10px; }
+      .end-address{ line-height:1.25; }
     }
   </style>
 </head>
 <body>
+  <!-- Convite (tela inicial) -->
   <img id="convite" src="convite_final.png" alt="Convite Halloween Thamires" draggable="false" />
 
-  <!-- Só este botão dispara o susto -->
+  <!-- Botão que dispara o susto -->
   <div id="msgToque" role="button" tabindex="0" aria-label="Toque para ver o convite completo">
     <span>🎃 TOQUE AQUI PARA VER O CONVITE COMPLETO 🎃</span>
   </div>
 
+  <!-- Vídeo e áudio -->
   <video id="jumpscare" src="susto.mp4" playsinline></video>
   <audio id="audioGrito" src="grito.mp3"></audio>
+
+  <!-- Tela final com o endereço -->
+  <section id="endScreen" aria-live="polite">
+    <div class="end-title">Local da Festa</div>
+    <div class="divider"></div>
+    <div class="end-sub">Endereço</div>
+    <div class="end-address">
+      Rua 1044, bloco 180, casa 1 — Volta Grande 4
+    </div>
+  </section>
 
   <script>
     const btn = document.getElementById('msgToque');
     const convite = document.getElementById('convite');
     const video = document.getElementById('jumpscare');
     const audio = document.getElementById('audioGrito');
+    const endScreen = document.getElementById('endScreen');
 
     function disparaSusto(){
+      // Esconde tela inicial
       btn.style.display='none';
       convite.style.display='none';
+      // Mostra vídeo
       video.style.display='block';
 
-      // Se quiser vibração no Android, descomente a linha abaixo:
-      // navigator.vibrate?.([150, 70, 200]);
+      // (Opcional) vibração: descomente se quiser
+      // navigator.vibrate?.([150,70,200]);
 
+      // Reproduz
+      video.currentTime = 0;
+      audio.currentTime = 0;
       video.play().catch(()=>{});
       audio.play().catch(()=>{});
 
-      video.onended = ()=>{
+      // Interrompe após 2.5s e mostra o endereço
+      const DURA_SUSTO_MS = 2500;
+      setTimeout(() => {
+        try { video.pause(); } catch(e){}
+        try { audio.pause(); } catch(e){}
         video.style.display='none';
-        convite.style.display='block';
-        // mensagem NÃO volta
-      };
+
+        // Mostra tela final (endereço)
+        endScreen.style.display='flex';
+      }, DURA_SUSTO_MS);
     }
 
     btn.addEventListener('click',disparaSusto);
