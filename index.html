@@ -4,11 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Convite - Thamires 22 Anos 🎃</title>
-
-  <!-- Fonte de terror -->
   <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
-
   <style>
+    :root { --ctaH: 72px; } /* altura reservada para a mensagem no rodapé */
     * { margin:0; padding:0; box-sizing:border-box; }
     html, body {
       width:100%; height:100%;
@@ -16,15 +14,16 @@
       display:flex; justify-content:center; align-items:center;
     }
 
-    /* Convite: apenas visual (não clica mais) */
+    /* a imagem NUNCA passa por trás da mensagem */
     #convite {
-      max-width:100%; max-height:100%;
-      width:auto; height:auto; object-fit:contain;
+      max-width:100%;
+      max-height: calc(100% - var(--ctaH));
+      width:auto; height:auto;
+      object-fit:contain;
       display:block; margin:auto;
       user-select:none; -webkit-user-drag:none;
     }
 
-    /* Vídeo do susto */
     #jumpscare {
       position:fixed; inset:0;
       width:100%; height:100%;
@@ -32,33 +31,44 @@
       display:none; z-index:10;
     }
 
-    /* Mensagem/botão (gatilho do susto) */
+    /* mensagem/botão fixo no rodapé */
     #msgToque {
-      position:fixed; left:50%; bottom:1.5%;
-      transform:translateX(-50%);
-      font-family: "Creepster", system-ui, sans-serif;
-      color:#fff; font-size:1.35rem; letter-spacing:1px;
-      text-align:center; cursor:pointer; user-select:none;
-      padding:10px 18px;
-      background:rgba(0,0,0,.78);
+      position:fixed; left:0; right:0; bottom:0;
+      height: var(--ctaH);
+      display:flex; align-items:center; justify-content:center;
+      font-family:"Creepster", system-ui, sans-serif;
+      font-size:1.2rem; letter-spacing:1px; color:#fff;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.75) 30%, rgba(0,0,0,.9) 100%);
+      border-top: 2px solid orange;
+      box-shadow: 0 -2px 12px rgba(255,165,0,.5);
+      cursor:pointer; user-select:none; z-index:5;
+      animation:pulsar 1.3s infinite;
+    }
+    #msgToque span {
+      padding:8px 16px;
+      background: rgba(0,0,0,.5);
       border:2px solid orange; border-radius:12px;
       box-shadow:0 0 12px orange;
-      z-index:5;
-      animation:pulsar 1.3s infinite;
     }
     #msgToque:focus { outline:3px solid #ff6a00; }
     @keyframes pulsar {
-      0%,100% { box-shadow:0 0 10px orange; transform:translateX(-50%) scale(1); }
-      50%     { box-shadow:0 0 24px red;    transform:translateX(-50%) scale(1.05); }
+      0%,100% { transform: translateZ(0) scale(1); }
+      50%     { transform: translateZ(0) scale(1.03); }
+    }
+
+    /* melhora o toque em telas muito pequenas */
+    @media (max-height:560px) {
+      :root { --ctaH: 64px; }
+      #msgToque span { font-size:1.05rem; }
     }
   </style>
 </head>
 <body>
   <img id="convite" src="convite_final.png" alt="Convite Halloween Thamires" draggable="false" />
 
-  <!-- Botão de ação: só aqui dispara o susto -->
+  <!-- botão: somente ele dispara o susto -->
   <div id="msgToque" role="button" tabindex="0" aria-label="Toque para ver o convite completo">
-    🎃 Toque aqui para ver o convite completo 🎃
+    <span>🎃 TOQUE AQUI PARA VER O CONVITE COMPLETO 🎃</span>
   </div>
 
   <video id="jumpscare" src="susto.mp4" playsinline></video>
@@ -71,31 +81,25 @@
     const audio = document.getElementById('audioGrito');
 
     function disparaSusto() {
-      // Esconde a mensagem e o convite, mostra o vídeo
+      // esconde o convite e a mensagem, mostra o vídeo imediatamente
       btn.style.display = 'none';
       convite.style.display = 'none';
       video.style.display = 'block';
 
-      // Reproduz imediatamente
       video.play().catch(e => console.log('Vídeo bloqueado:', e));
       audio.play().catch(e => console.log('Áudio bloqueado:', e));
 
-      // Quando terminar, volta ao convite e reexibe a mensagem
+      // quando terminar, volta SÓ o convite (sem mensagem)
       video.onended = () => {
         video.style.display = 'none';
         convite.style.display = 'block';
-        btn.style.display = 'block';
+        // mensagem NÃO volta
       };
     }
 
-    // Clique/toque só NA MENSAGEM
     btn.addEventListener('click', disparaSusto);
-    // Acessível no teclado (Enter/Espaço)
     btn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        disparaSusto();
-      }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); disparaSusto(); }
     });
   </script>
 </body>
